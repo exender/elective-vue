@@ -56,7 +56,9 @@ p {
 <form @submit.prevent="addTask" style="margin-bottom: 16px;">
   <label for="new-task">Ajouter une tâche :</label>
   <input type="text" id="new-task" v-model="newTask" style="margin-right: 8px;">
+  <label for="time-imp">Temps imparti :</label>
   <input type="number" id="time-imp" v-model="newTimeImp" min="0" style="margin-right: 8px;">
+  <label for="responsible">Responsable :</label>
   <select v-model="taskResponsible" style="margin-right: 8px;">
     <option value="">Assigné à</option>
     <option v-for="name in fakeNames" :value="name">{{ name }}</option>
