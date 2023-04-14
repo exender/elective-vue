@@ -40,46 +40,44 @@
     </form>
 
     <!-- Liste de tâches -->
-    <!-- Liste de tâches -->
-<ul>
-  <li v-for="(task, index) in filteredTasks" :key="index">
-    <!-- Bouton pour marquer une tâche comme terminée -->
-    <button
-      @click="toggleCompleted(task)"
-      :class="{ completed: task.completed }"
-    >
-      {{ task.completed ? 'Non terminée' : 'Terminée' }}
-    </button>
+    <ul>
+      <li v-for="(task, index) in filteredTasks" :key="index">
+        <!-- Bouton pour marquer une tâche comme terminée -->
+        <button
+          @click="toggleCompleted(task)"
+          :class="{ completed: task.completed }"
+        >
+          {{ task.completed ? "Non terminée" : "Terminée" }}
+        </button>
 
-    <!-- Champ de texte pour éditer la tâche -->
-    <input type="text" v-model="task.text" @blur="updateTask(task)" />
+        <!-- Champ de texte pour éditer la tâche -->
+        <input type="text" v-model="task.text" @blur="updateTask(task)" />
 
-    <!-- Champ de texte pour assigner une personne à la tâche -->
-    <!-- Liste déroulante pour assigner une personne à la tâche -->
-    <select v-model="task.assignedTo">
-      <option value="">Assigné à</option>
-      <option v-for="name in fakeNames" :value="name">{{ name }}</option>
-    </select>
+        <!-- Champ de texte pour assigner une personne à la tâche -->
+        <!-- Liste déroulante pour assigner une personne à la tâche -->
+        <select v-model="task.assignedTo">
+          <option value="">Assigné à</option>
+          <option v-for="name in fakeNames" :value="name">{{ name }}</option>
+        </select>
 
-    <!-- Champ de texte pour le temps imparti de la tâche -->
-    <input
-      type="number"
-      v-model="task.timeImp"
-      @blur="updateTask(task)"
-      min="0"
-    />
+        <!-- Champ de texte pour le temps imparti de la tâche -->
+        <input
+          type="number"
+          v-model="task.timeImp"
+          @blur="updateTask(task)"
+          min="0"
+        />
 
-    <!-- Bouton pour supprimer la tâche -->
-    <button @click="deleteTask(index)">Supprimer</button>
-    <!-- Checkbox pour activer/désactiver la suppression des tâches sélectionnées -->
-    <input
-      type="checkbox"
-      v-model="task.selected"
-      @change="onTaskSelectionChange(task)"
-    />
-  </li>
-</ul>
-
+        <!-- Bouton pour supprimer la tâche -->
+        <button @click="deleteTask(index)">Supprimer</button>
+        <!-- Checkbox pour activer/désactiver la suppression des tâches sélectionnées -->
+        <input
+          type="checkbox"
+          v-model="task.selected"
+          @change="onTaskSelectionChange(task)"
+        />
+      </li>
+    </ul>
 
     <!-- Bouton pour supprimer les tâches sélectionnées -->
     <button @click="deleteSelectedTasks">
@@ -210,7 +208,6 @@ export default {
     markAsCompleted(task) {
       task.completed = true;
     },
-
   },
 };
 </script>
