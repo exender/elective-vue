@@ -1,52 +1,3 @@
-<style scoped>
-/* Style pour la liste de tâches */
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-input[type="checkbox"] {
-  margin-right: 8px;
-}
-
-input[type="text"] {
-  flex: 1;
-  padding: 8px;
-  border: none;
-  border-bottom: 1px solid #ccc;
-}
-
-select {
-  margin-left: 8px;
-}
-
-button {
-  margin-left: 8px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-}
-
-/* Style pour le filtre */
-#filter {
-  margin-top: 16px;
-  padding: 8px;
-  border: 1px solid #ccc;
-}
-
-/* Style pour le compteur de tâches */
-p {
-  margin: 8px 0;
-}
-</style>
 <!-- eslint-disable vue/require-v-for-key -->
 <template>
   <div>
@@ -71,7 +22,7 @@ p {
     <ul>
       <li v-for="(task, index) in filteredTasks" :key="index">
         <!-- Bouton pour marquer une tâche comme terminée -->
-        <button @click="markAsCompleted(task)">Terminée</button>
+        <button @click="markAsCompleted(task)" :class="{ completed: task.completed }">Terminée</button>
 
         <!-- Champ de texte pour éditer la tâche -->
         <input type="text" v-model="task.text" @blur="updateTask(task)">
@@ -89,7 +40,8 @@ p {
         <!-- Bouton pour supprimer la tâche -->
         <button @click="deleteTask(index)">Supprimer</button>
         <!-- Checkbox pour activer/désactiver la suppression des tâches sélectionnées -->
-        <input type="checkbox" v-model="task.selected">
+        <input type="checkbox" v-model="task.selected" @change="onTaskSelectionChange(task)">
+
 
       </li>
     </ul>
@@ -107,7 +59,6 @@ p {
               <option value="uncompleted">Non terminées</option>
           </select>
       </div>
-
       <!-- Compteur de tâches -->
       <div>
           <p>Nombre de tâches : {{ tasks.length }}</p>
@@ -164,6 +115,13 @@ export default {
       deleteTask(index) {
           this.tasks.splice(index, 1)
       },
+      onTaskSelectionChange(task) {
+    if (task.selected) {
+      this.selectedTasks.push(task);
+    } else {
+      this.selectedTasks = this.selectedTasks.filter(t => t !== task);
+    }
+  },
       // Supprimer les tâches sélectionnées
       deleteSelectedTasks() {
     // Créer un tableau pour stocker les index des tâches à supprimer
@@ -196,3 +154,58 @@ export default {
 }
 }
 </script>
+
+
+
+<style scoped>
+/* Style pour la liste de tâches */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+}
+
+select {
+  margin-left: 8px;
+}
+
+button {
+  margin-left: 8px;
+  background-color: #ff0000; /* Modifier la couleur d'origine du bouton en rouge */
+  color: #fff;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* Style pour le filtre */
+#filter {
+  margin-top: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+}
+
+/* Style pour le compteur de tâches */
+p {
+  margin: 8px 0;
+}
+.completed {
+  background-color: #28a745;
+}
+</style>
