@@ -1,5 +1,3 @@
-
-
 <style scoped>
 /* Style pour la liste de tâches */
 ul {
@@ -58,13 +56,14 @@ p {
 <form @submit.prevent="addTask" style="margin-bottom: 16px;">
   <label for="new-task">Ajouter une tâche :</label>
   <input type="text" id="new-task" v-model="newTask" style="margin-right: 8px;">
+  <input type="number" id="time-imp" v-model="newTimeImp" style="margin-right: 8px;">
   <select v-model="taskResponsible" style="margin-right: 8px;">
     <option value="">Assigné à</option>
     <option v-for="name in fakeNames" :value="name">{{ name }}</option>
   </select>
   <button type="submit" style="background-color: #007bff; color: #fff; border: none; padding: 8px; cursor: pointer;">Ajouter</button>
-  <!-- Afficher un message d'erreur si le nom de la tâche ou le responsable n'est pas renseigné -->
 </form>
+
 
 <!-- Liste de tâches -->
 <ul>
@@ -84,8 +83,6 @@ p {
 
     <!-- Bouton pour supprimer la tâche -->
     <button @click="deleteTask(index)">Supprimer</button>
-
-    {{ task.text }}
   </li>
 </ul>
 
@@ -145,15 +142,15 @@ export default {
   },
   methods: {
       // Ajouter une tâche
-    // Ajouter une tâche
     addTask() {
-  if (this.newTask.trim() && this.taskResponsible) {
-    this.tasks.push({ text: this.newTask, completed: false, assignedTo: this.taskResponsible });
-    this.newTask = '';
-    this.taskResponsible = '';
+      if (this.newTask.trim() && this.newTimeImp && this.taskResponsible) {
+      this.tasks.push({ text: this.newTask, timeImp: this.newTimeImp, completed: false, assignedTo: this.taskResponsible });
+      this.newTask = '';
+      this.newTimeImp = '';
+      this.taskResponsible = '';
   } else {
     // Afficher un message d'erreur si les champs sont vides
-    alert('Veuillez renseigner le nom de la tâche et le responsable.');
+    alert('Veuillez renseigner le nom de la tâche, le temps imparti et le responsable.');
   }
 },
       // Supprimer une tâche
