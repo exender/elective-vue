@@ -192,15 +192,25 @@ export default {
     },
     // Mettre à jour une tâche
     updateTask(task) {
-      // Mettre à jour la tâche dans la liste des tâches
-      this.tasks.splice(this.tasks.indexOf(task), 1, task);
+      // Vérifier si le champ texte de la tâche est vide
+      if (!task.text.trim()) {
+        alert("Le champ texte ne peut pas être vide");
+        return;
+      }
+
+      // Vérifier si le champ temps imparti de la tâche est vide
+      if (!task.timeImp) {
+        alert("Le champ temps imparti ne peut pas être vide");
+        return;
+      }
+
+      // Mettre à jour la tâche
+      task.timeImp = parseInt(task.timeImp);
     },
     markAsCompleted(task) {
       task.completed = true;
     },
-    toggleCompleted(task) {
-      task.completed = !task.completed;
-    },
+
   },
 };
 </script>
