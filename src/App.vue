@@ -81,10 +81,14 @@ p {
       <option v-for="name in fakeNames" :value="name">{{ name }}</option>
     </select>
 
+    <!-- Champ de texte pour le temps imparti de la tâche -->
+    <input type="number" v-model="task.timeImp" @blur="updateTask(task)">
+
     <!-- Bouton pour supprimer la tâche -->
     <button @click="deleteTask(index)">Supprimer</button>
   </li>
 </ul>
+
 
 
 
@@ -114,9 +118,7 @@ export default {
  data() {
   return {
     tasks: [
-      { text: 'Tâche 1', completed: false, assignedTo: '' },
-      { text: 'Tâche 2', completed: true, assignedTo: '' },
-      { text: 'Tâche 3', completed: false, assignedTo: '' }
+
     ],
     newTask: '',
     selectedTasks: [],
