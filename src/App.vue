@@ -56,7 +56,7 @@ p {
 <form @submit.prevent="addTask" style="margin-bottom: 16px;">
   <label for="new-task">Ajouter une tâche :</label>
   <input type="text" id="new-task" v-model="newTask" style="margin-right: 8px;">
-  <input type="number" id="time-imp" v-model="newTimeImp" style="margin-right: 8px;">
+  <input type="number" id="time-imp" v-model="newTimeImp" min="0" style="margin-right: 8px;">
   <select v-model="taskResponsible" style="margin-right: 8px;">
     <option value="">Assigné à</option>
     <option v-for="name in fakeNames" :value="name">{{ name }}</option>
@@ -65,35 +65,36 @@ p {
 </form>
 
 
-<!-- Liste de tâches -->
-<ul>
-  <li v-for="(task, index) in filteredTasks" :key="index">
-    <!-- Checkbox pour sélectionner/désélectionner la tâche -->
-    <input type="checkbox" v-model="task.completed" @click="updateTask(task)">
+    <!-- Liste de tâches -->
+    <ul>
+      <li v-for="(task, index) in filteredTasks" :key="index">
+        <!-- Bouton pour marquer une tâche comme terminée -->
+        <button @click="markAsCompleted(task)">Terminée</button>
 
-    <!-- Champ de texte pour éditer la tâche -->
-    <input type="text" v-model="task.text" @blur="updateTask(task)">
+        <!-- Champ de texte pour éditer la tâche -->
+        <input type="text" v-model="task.text" @blur="updateTask(task)">
 
-    <!-- Champ de texte pour assigner une personne à la tâche -->
-    <!-- Liste déroulante pour assigner une personne à la tâche -->
-    <select v-model="task.assignedTo">
-      <option value="">Assigné à</option>
-      <option v-for="name in fakeNames" :value="name">{{ name }}</option>
-    </select>
+        <!-- Champ de texte pour assigner une personne à la tâche -->
+        <!-- Liste déroulante pour assigner une personne à la tâche -->
+        <select v-model="task.assignedTo">
+          <option value="">Assigné à</option>
+          <option v-for="name in fakeNames" :value="name">{{ name }}</option>
+        </select>
 
-    <!-- Champ de texte pour le temps imparti de la tâche -->
-    <input type="number" v-model="task.timeImp" @blur="updateTask(task)">
+        <!-- Champ de texte pour le temps imparti de la tâche -->
+        <input type="number" v-model="task.timeImp" @blur="updateTask(task)" min="0">
 
-    <!-- Bouton pour supprimer la tâche -->
-    <button @click="deleteTask(index)">Supprimer</button>
-  </li>
-</ul>
+        <!-- Bouton pour supprimer la tâche -->
+        <button @click="deleteTask(index)">Supprimer</button>
+        <!-- Checkbox pour activer/désactiver la suppression des tâches sélectionnées -->
+        <input type="checkbox" v-model="task.selected">
 
+      </li>
+    </ul>
 
+    <!-- Bouton pour supprimer les tâches sélectionnées -->
+    <button @click="deleteSelectedTasks">Supprimer les tâches sélectionnées</button>
 
-
-      <!-- Bouton pour supprimer les tâches sélectionnées -->
-      <button @click="deleteSelectedTasks">Supprimer les tâches sélectionnées</button>
 
       <!-- Filtres -->
       <div>
@@ -117,6 +118,7 @@ p {
 export default {
  data() {
   return {
+    deleteMode: false,
     tasks: [
 
     ],
@@ -125,6 +127,7 @@ export default {
     currentFilter: 'all',
     fakeNames: ['John', 'Jane', 'Alice', 'Bob', 'Charlie'],
     taskResponsible: '' // Ajouter cette ligne pour le responsable de la tâche
+    
   }
 },
 
@@ -161,16 +164,33 @@ export default {
       },
       // Supprimer les tâches sélectionnées
       deleteSelectedTasks() {
-          this.selectedTasks.sort().reverse().forEach(index => {
-              this.tasks.splice(index, 1)
-          })
-          this.selectedTasks = []
-      },
+    // Créer un tableau pour stocker les index des tâches à supprimer
+    const indexesToDelete = [];
+    // Parcourir le tableau des tâches
+    for (let i = 0; i < this.tasks.length; i++) {
+      // Vérifier si la case à cocher est cochée
+      if (this.tasks[i].selected) {
+        // Ajouter l'index de la tâche à supprimer dans le tableau
+        indexesToDelete.push(i);
+      }
+    }
+    // Supprimer les tâches en partant de la fin du tableau pour éviter les décalages d'index
+    for (let i = indexesToDelete.length - 1; i >= 0; i--) {
+      this.tasks.splice(indexesToDelete[i], 1);
+    }
+    // Réinitialiser le tableau des tâches sélectionnées
+    this.selectedTasks = [];
+    // Réinitialiser le mode de suppression
+    this.deleteMode = false;
+  },
       // Mettre à jour une tâche
       updateTask(task) {
     // Mettre à jour la tâche dans la liste des tâches
     this.tasks.splice(this.tasks.indexOf(task), 1, task);
-  }
+  },
+  markAsCompleted(task) {
+      task.completed = true;
+    },
 }
 }
 </script>
