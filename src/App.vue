@@ -60,10 +60,12 @@
           </select>
       </div>
       <!-- Compteur de tâches -->
-      <div>
-          <p>Nombre de tâches : {{ tasks.length }}</p>
-          <p>Nombre de tâches sélectionnées : {{ selectedTasks.length }}</p>
-      </div>
+<div>
+    <p>Nombre de tâches : {{ tasks.length }}</p>
+    <p>Nombre de tâches sélectionnées : {{ selectedTasks.length }}</p>
+    <p>Temps total de toutes les tâches : {{ totalTime }}</p>
+</div>
+
   </div>
 </template>
 
@@ -76,6 +78,7 @@ export default {
 
     ],
     newTask: '',
+    newTimeImp: '',
     selectedTasks: [],
     currentFilter: 'all',
     fakeNames: ['John', 'Jane', 'Alice', 'Bob', 'Charlie'],
@@ -89,28 +92,32 @@ export default {
   computed: {
       // Filtrer les tâches en fonction du filtre sélectionné
       filteredTasks() {
-          if (this.currentFilter === 'completed') {
-              return this.tasks.filter(task => task.completed)
-          } else if (this.currentFilter === 'uncompleted') {
-              return this.tasks.filter(task => !task.completed)
-          } else {
-              return this.tasks
-          }
-      }
-  },
+            if (this.currentFilter === 'completed') {
+                return this.tasks.filter(task => task.completed)
+            } else if (this.currentFilter === 'uncompleted') {
+                return this.tasks.filter(task => !task.completed)
+            } else {
+                return this.tasks
+            }
+        },
+        // Calculer le temps total de toutes les tâches
+        totalTime() {
+            return this.tasks.reduce((total, task) => total + parseInt(task.timeImp || 0), 0);
+        }
+    },
   methods: {
       // Ajouter une tâche
-    addTask() {
-      if (this.newTask.trim() && this.newTimeImp && this.taskResponsible) {
-      this.tasks.push({ text: this.newTask, timeImp: this.newTimeImp, completed: false, assignedTo: this.taskResponsible });
-      this.newTask = '';
-      this.newTimeImp = '';
-      this.taskResponsible = '';
-  } else {
-    // Afficher un message d'erreur si les champs sont vides
-    alert('Veuillez renseigner le nom de la tâche, le temps imparti et le responsable.');
-  }
-},
+      addTask() {
+            if (this.newTask.trim() && this.newTimeImp && this.taskResponsible) {
+                this.tasks.push({ text: this.newTask, timeImp: this.newTimeImp, completed: false, assignedTo: this.taskResponsible });
+                this.newTask = '';
+                this.newTimeImp = '';
+                this.taskResponsible = '';
+            } else {
+                // Afficher un message d'erreur si les champs sont vides
+                alert('Veuillez renseigner le nom de la tâche, le temps imparti et le responsable.');
+            }
+        },
       // Supprimer une tâche
       deleteTask(index) {
           this.tasks.splice(index, 1)
